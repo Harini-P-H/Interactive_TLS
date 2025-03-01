@@ -1,0 +1,1602 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     72254,       1594]
+NotebookOptionsPosition[     71764,       1577]
+NotebookOutlinePosition[     72163,       1593]
+CellTagsIndexPosition[     72120,       1590]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"**", " ", "Written"}], " ", "by", " ", "Harini", " ", 
+     "Hapuarachchi"}], ",", " ", 
+    RowBox[{
+    "RMIT", " ", "University", " ", "for", " ", "Wolfram", " ", "User", " ", 
+     "Conference"}], ",", " ", 
+    RowBox[{"Australasia", " ", "2024"}]}], " ", "***)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"**", " ", "Content"}], " ", "of", " ", "my", " ", "presentation",
+     " ", "at", " ", "the", " ", "conference", " ", "and", " ", "further", 
+    " ", "details", " ", "on", " ", "the", " ", "theory", " ", "implemented", 
+    " ", "can", " ", "be", " ", "found", " ", "in", " ", "the", " ", "link", 
+    " ", 
+    RowBox[{"below", ":"}]}], " ", "***)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"**", " ", 
+     RowBox[{"https", ":"}]}], "//", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"medium", ".", 
+       RowBox[{"com", "/@", "harini"}], ".", "hapuarachchi"}], "/", "a"}], 
+     "-", "simple", "-", "introduction", "-", "to", "-", "interactively", "-",
+      "simulating", "-", "open", "-", "quantum", "-", "systems", "-", 
+     RowBox[{"8607", "ce5832a0"}]}]}], " ", "***)"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Clear", "[", "\"\<Global`*\>\"", "]"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Clear", " ", "all", " ", "definitions", " ", "and", " ", "values", " ", 
+     "associated", " ", "with", " ", "symbols", " ", "in", " ", "the", " ", 
+     "Global", " ", "context"}], " ", "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+     "**", "**", "**", "**", "**", "**", "**", "**", "**", "**", "**", "**", "**",
+       "**", " ", "Preparing"}], " ", "the", " ", "functions", " ", 
+     RowBox[{
+     "needed", " ", "**", "**", "**", "**", "**", "**", "**", "**", "**", "**",
+       "**", "**", "**", "**", "**"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Functions", " ", "to", " ", "get", " ", "Hamiltonian", " ", "and", " ", 
+     "Lindblad", " ", "terms", " ", "in", " ", "angular", " ", "frequency", 
+     " ", "units"}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"getHB", "[", 
+      RowBox[{
+      "\[Delta]B_", ",", "\[CapitalOmega]0B_", ",", " ", "\[Phi]0B_"}], "]"}],
+      ":=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{"\[Delta]B", "/", "2"}], ")"}]}], "*", 
+       RowBox[{"PauliMatrix", "[", "3", "]"}]}], "-", 
+      RowBox[{"\[CapitalOmega]0B", "*", 
+       RowBox[{"Cos", "[", "\[Phi]0B", "]"}], "*", 
+       RowBox[{"PauliMatrix", "[", "1", "]"}]}], "-", 
+      RowBox[{"\[CapitalOmega]0B", "*", 
+       RowBox[{"Sin", "[", "\[Phi]0B", "]"}], "*", 
+       RowBox[{"PauliMatrix", "[", "2", "]"}]}]}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"getLindTermB", "[", 
+      RowBox[{"\[Gamma]B_", ",", "\[Sigma]B_", ",", "\[Rho]B_"}], "]"}], ":=", 
+     RowBox[{"\[Gamma]B", "*", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"\[Sigma]B", ".", "\[Rho]B", ".", 
+         RowBox[{"ConjugateTranspose", "[", "\[Sigma]B", "]"}]}], "-", 
+        RowBox[{
+         RowBox[{"1", "/", "2"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"ConjugateTranspose", "[", "\[Sigma]B", "]"}], ".", 
+              "\[Sigma]B"}], ")"}], ".", "\[Rho]B"}], "+", 
+           RowBox[{"\[Rho]B", ".", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"ConjugateTranspose", "[", "\[Sigma]B", "]"}], ".", 
+              "\[Sigma]B"}], ")"}]}]}], ")"}]}]}], ")"}]}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+     "Function", " ", "to", " ", "output", " ", "the", " ", "time", " ", 
+      "derivative", " ", "of", " ", "density", " ", "matrix", " ", "\[Rho]"}],
+      ",", " ", 
+     RowBox[{
+     "as", " ", "per", " ", "the", " ", "Lindblad", " ", "master", " ", 
+      "equation"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"getRhoDotB", "[", 
+     RowBox[{
+     "\[Delta]B_", ",", "\[CapitalOmega]0B_", ",", " ", "\[Phi]0B_", ",", 
+      "\[Rho]B_", ",", "\[Gamma]1B_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"HB", ",", " ", "decayTermB", ",", " ", "dephTermB"}], "}"}], 
+      ",", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+       "These", " ", "variables", " ", "are", " ", "treated", " ", "as", " ", 
+        "local", " ", "by", " ", "Module"}], " ", "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"HB", " ", "=", " ", 
+        RowBox[{"getHB", "[", 
+         RowBox[{
+         "\[Delta]B", ",", "\[CapitalOmega]0B", ",", " ", "\[Phi]0B"}], 
+         "]"}]}], ";", 
+       "                                                                      \
+                                          ", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "Hamiltonian", " ", "in", " ", "angular", " ", "frequency", " ", 
+         "units"}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"\[Sigma]1B", "=", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "1"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0"}], "}"}]}], "}"}]}], ";", " ", 
+       RowBox[{"decayTermB", " ", "=", " ", 
+        RowBox[{"getLindTermB", "[", 
+         RowBox[{"\[Gamma]1B", ",", "\[Sigma]1B", ",", "\[Rho]B"}], "]"}]}], 
+       ";", "                           ", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "Decay", " ", "term", " ", "of", " ", "the", " ", "Lindblad", " ", 
+         "master", " ", "equation"}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"rhoDotB", " ", "=", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "I"}], "*", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"HB", ".", "\[Rho]B"}], "-", 
+            RowBox[{"\[Rho]B", ".", "HB"}]}], ")"}]}], "+", 
+         "decayTermB"}]}]}]}], "]"}]}], 
+   "                                                                          \
+  ", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Output", " ", "of", " ", "the", " ", "function"}], " ", "*)"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Function", " ", "to", " ", "compute", " ", "Bloch", " ", "vector", " ", 
+     "given", " ", "a", " ", "density", " ", "matrix"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"blochVectorFrom\[Rho]", "[", "\[Rho]B_", "]"}], ":=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Tr", "[", 
+        RowBox[{"\[Rho]B", ".", 
+         RowBox[{"PauliMatrix", "[", "1", "]"}]}], "]"}], ",", 
+       RowBox[{"Tr", "[", 
+        RowBox[{"\[Rho]B", ".", 
+         RowBox[{"PauliMatrix", "[", "2", "]"}]}], "]"}], ",", 
+       RowBox[{"Tr", "[", 
+        RowBox[{"\[Rho]B", ".", 
+         RowBox[{"PauliMatrix", "[", "3", "]"}]}], "]"}]}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Function", " ", "to", " ", "compute", " ", "the", " ", "density", " ", 
+     "matrix", " ", "given", " ", "a", " ", "Bloch", " ", "vector"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"\[Rho]FromBlochVector", "[", 
+      RowBox[{"{", 
+       RowBox[{"rx_", ",", " ", "ry_", ",", " ", "rz_"}], "}"}], "]"}], ":=", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"IdentityMatrix", "[", "2", "]"}], "+", 
+        RowBox[{"rx", "*", 
+         RowBox[{"PauliMatrix", "[", "1", "]"}]}], "+", 
+        RowBox[{"ry", "*", 
+         RowBox[{"PauliMatrix", "[", "2", "]"}]}], "+", 
+        RowBox[{"rz", "*", 
+         RowBox[{"PauliMatrix", "[", "3", "]"}]}]}], ")"}], "/", "2"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"BlochVectorFromInitPosStr", "[", "InitPosStr_", "]"}], ":=", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+       "InitPosStr", "==", 
+        "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"0\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)\>\""}], ",", " ", 
+       RowBox[{"r", "=", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "1"}], "}"}]}], " ", ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+         "InitPosStr", "==", 
+          "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"1\
+\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\
+\"Bold\"]\)\>\""}], ",", " ", 
+         RowBox[{"r", "=", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", 
+            RowBox[{"-", "1"}]}], "}"}]}], ",", " ", "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+           "InitPosStr", "==", 
+            "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\
++\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight-\
+>\"Bold\"]\)\>\""}], ",", " ", 
+           RowBox[{"r", "=", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0", ",", "0"}], "}"}]}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{
+             "InitPosStr", "==", 
+              "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\
+\"-\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",\
+FontWeight->\"Bold\"]\)\>\""}], ",", " ", 
+             RowBox[{"r", "=", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"-", "1"}], ",", "0", ",", "0"}], "}"}]}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{
+               "InitPosStr", "==", 
+                "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*\
+StyleBox[\"i\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",\
+FontWeight->\"Bold\"]\)\>\""}], ",", " ", 
+               RowBox[{"r", "=", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "1", ",", "0"}], "}"}]}], ",", 
+               "\[IndentingNewLine]", 
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{
+                 "InitPosStr", "==", 
+                  "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*\
+StyleBox[\"-\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"i\",FontWeight->\"Bold\
+\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"Bold\"]\)\>\""}], 
+                 ",", " ", 
+                 RowBox[{"r", "=", 
+                  RowBox[{"{", 
+                   RowBox[{"0", ",", 
+                    RowBox[{"-", "1"}], ",", "0"}], "}"}]}], ",", "Nothing"}],
+                 "]"}]}], "]"}]}], "]"}]}], "]"}]}], "]"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+     "**", "**", "**", "**", "**", "**", "**", "**", "**", "**", "**", "**"}],
+      "*", " ", "Solving", " ", "the", " ", "Lindblad", " ", "Master", " ", 
+     "Equation", " ", "with", " ", 
+     RowBox[{
+     "ParametricNDSolve", " ", "**", "**", "**", "**", "**", "**", "**", "**",
+       "**", "**", "**", "**"}], "*"}], " ", "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Function", " ", "to", " ", "compute", " ", "the", " ", "density", " ", 
+     "matrix", " ", "using", " ", "symbolic", " ", "matrix", " ", "elements", 
+     " ", 
+     RowBox[{"(", 
+      RowBox[{
+      "which", " ", "will", " ", "be", " ", "the", " ", "independent", " ", 
+       "variables", " ", "of", " ", "ParametricNDSolve"}], ")"}]}], " ", 
+    "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"\[Rho]B", "[", "tB_", "]"}], ":=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"\[Rho]11B", "[", "tB", "]"}], ",", 
+         RowBox[{"\[Rho]12B", "[", "tB", "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"\[Rho]21B", "[", "tB", "]"}], ",", 
+         RowBox[{"\[Rho]22B", "[", "tB", "]"}]}], "}"}]}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+     "Coupled", " ", "differential", " ", "equations", " ", "to", " ", 
+      "solve", " ", "are", " ", "obtained", " ", "by", " ", "element"}], "-", 
+     RowBox[{"wise", " ", "comparison", " ", 
+      RowBox[{"(", "Flattening", ")"}], " ", "the", " ", "matrix", " ", 
+      RowBox[{"equation", " ", "[", "2", "]"}]}]}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"scalarEqnsB", " ", "=", " ", 
+     RowBox[{"Thread", "[", 
+      RowBox[{"Flatten", "/@", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"D", "[", 
+          RowBox[{
+           RowBox[{"\[Rho]B", "[", "tB", "]"}], ",", "tB"}], "]"}], "==", 
+         RowBox[{"getRhoDotB", "[", 
+          RowBox[{
+          "\[Delta]B", ",", "\[CapitalOmega]0B", ",", "\[Phi]0B", ",", " ", 
+           RowBox[{"\[Rho]B", "[", "tB", "]"}], ",", "\[Gamma]1B"}], "]"}]}], 
+        ")"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"initConditions", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Rho]11B", "[", "0", "]"}], " ", "==", " ", 
+        "\[Rho]11initB"}], ",", 
+       RowBox[{
+        RowBox[{"\[Rho]12B", "[", "0", "]"}], "==", "\[Rho]12initB"}], ",", 
+       RowBox[{
+        RowBox[{"\[Rho]21B", "[", "0", "]"}], "==", "\[Rho]21initB"}], ",", 
+       RowBox[{
+        RowBox[{"\[Rho]22B", "[", "0", "]"}], "==", "\[Rho]22initB"}]}], 
+      "}"}]}], ";"}], 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Note", " ", "these", " ", "are", " ", "set", " ", "to", " ", 
+     "parameters"}], " ", "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+     "Solving", " ", "the", " ", "differential", " ", "equations", " ", 
+      "parametrically"}], "]"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"solB", "=", 
+     RowBox[{"ParametricNDSolve", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"scalarEqnsB", ",", " ", "initConditions"}], "}"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+        "\[Rho]11B", ",", "\[Rho]12B", ",", "\[Rho]21B", ",", "\[Rho]22B"}], 
+        "}"}], ",", 
+       "                                                                      \
+                                                 ", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "Dependent", " ", "variables", " ", "we", " ", "solve", " ", "for"}], 
+        " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"tB", ",", "0.", ",", "TB"}], "}"}], ",", 
+       "                                                                      \
+                                                                            ", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "Independent", " ", "variable", " ", "and", " ", "its", " ", 
+         "range"}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+        "\[Delta]B", ",", " ", "\[CapitalOmega]0B", ",", "\[Phi]0B", ",", " ",
+          "\[Gamma]1B", ",", " ", 
+         RowBox[{"(*", 
+          RowBox[{"\[Gamma]2B", ","}], " ", "*)"}], "TB", ",", " ", 
+         "\[Rho]11initB", ",", "\[Rho]12initB", ",", "\[Rho]21initB", ",", 
+         "\[Rho]22initB"}], "}"}]}], "]"}]}], ";"}], "        ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Parameters", " ", "the", " ", "solution", " ", "will", " ", "depend", 
+     " ", "on"}], " ", "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+     "If", " ", "ParametricNDSolve", " ", "solutions", " ", "should", " ", 
+      "be", " ", "used", " ", "in", " ", "more", " ", "than", " ", "one", " ",
+       "place"}], ",", " ", 
+     RowBox[{
+     "we", " ", "define", " ", "solution", " ", "variables", " ", 
+      "parametrically"}], ",", " ", 
+     RowBox[{"as", " ", "follows"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "\[Rho]11SolB", ",", " ", "\[Rho]12SolB", ",", " ", "\[Rho]21SolB", ",",
+        " ", "\[Rho]22SolB"}], "}"}], "=", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "\[Rho]11B", ",", "\[Rho]12B", ",", "\[Rho]21B", ",", "\[Rho]22B"}], 
+       "}"}], "/.", "solB"}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"**", "**", "**", "**", "**"}], "*", " ", "Drawing", " ", "the", 
+     " ", "sphere", " ", "and", " ", "axes", " ", "of", " ", "the", " ", 
+     "Bloch", " ", "sphere", " ", "to", " ", "be", " ", "displayed", " ", 
+     "within", " ", 
+     RowBox[{"Manipulate", " ", "**", "**", "**", "**", "**"}], "*"}], " ", 
+    " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"blochSphere", "=", 
+     RowBox[{"SphericalPlot3D", "[", 
+      RowBox[{"1", ",", 
+       RowBox[{"{", 
+        RowBox[{"\[Theta]", ",", "0", ",", "\[Pi]"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\[CurlyPhi]", ",", "0", ",", 
+         RowBox[{"2", " ", "\[Pi]"}]}], "}"}], ",", 
+       RowBox[{"Mesh", "->", 
+        RowBox[{"{", 
+         RowBox[{"20", ",", "20"}], "}"}]}], ",", 
+       RowBox[{"MeshStyle", "->", 
+        RowBox[{"Directive", "[", 
+         RowBox[{"Blue", ",", "Thin", ",", 
+          RowBox[{"Opacity", "[", "0.2", "]"}]}], "]"}]}], ",", 
+       RowBox[{"PlotStyle", "->", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"Opacity", "[", "0.1", "]"}], ",", "LightBlue"}], "]"}]}], 
+       ",", 
+       RowBox[{"Lighting", "->", 
+        RowBox[{"{", 
+         RowBox[{"\"\<Neutral\>\"", ",", "Blue"}], "}"}]}], ",", 
+       RowBox[{"Axes", "->", "False"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"axes", "=", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", "\[IndentingNewLine]", 
+       RowBox[{"Black", ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1.8", ",", "0", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Text", "[", 
+         RowBox[{
+          RowBox[{"Style", "[", 
+           RowBox[{"\"\<\!\(\*OverscriptBox[\(x\), \(^\)]\)\>\"", ",", "14"}],
+            "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"1.9", ",", "0", ",", "0"}], "}"}]}], "]"}], ",", 
+        "\[IndentingNewLine]", "Black", ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", "1.8", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Text", "[", 
+         RowBox[{
+          RowBox[{"Style", "[", 
+           RowBox[{"\"\<\!\(\*OverscriptBox[\(y\), \(^\)]\)\>\"", ",", "14"}],
+            "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "1.9", ",", "0"}], "}"}]}], "]"}], ",", 
+        "\[IndentingNewLine]", "Black", ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0", ",", "1.8"}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Text", "[", 
+         RowBox[{
+          RowBox[{"Style", "[", 
+           RowBox[{"\"\<\!\(\*OverscriptBox[\(z\), \(^\)]\)\>\"", ",", "14"}],
+            "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0.2", ",", "1.7"}], "}"}]}], "]"}], ",", 
+        "\[IndentingNewLine]", "Dashed", ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"-", "1.0"}], ",", "0", ",", "0"}], "}"}]}], "}"}], 
+         "]"}], ",", "Dashed", ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", 
+             RowBox[{"-", "1.0"}], ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
+        "Dashed", ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0", ",", 
+             RowBox[{"-", "1.0"}]}], "}"}]}], "}"}], "]"}], ",", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"Text", "[", 
+         RowBox[{
+          RowBox[{"Style", "[", 
+           RowBox[{
+           "\"\<Bloch vector evolution\>\"", ",", " ", "Bold", ",", " ", 
+            "15"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0.", ",", "0.", ",", "2.0"}], "}"}]}], "]"}], ",", 
+        "\[IndentingNewLine]", "Red", ",", 
+        RowBox[{"PointSize", "[", "Large", "]"}], ",", 
+        RowBox[{"Point", "[", 
+         RowBox[{"{", 
+          RowBox[{"0.1", ",", "0.", ",", 
+           RowBox[{"-", "1.7"}]}], "}"}], "]"}], ",", " ", 
+        "\[IndentingNewLine]", "Blue", ",", 
+        RowBox[{"PointSize", "[", "Medium", "]"}], ",", 
+        RowBox[{"Point", "[", 
+         RowBox[{"{", 
+          RowBox[{"0.1", ",", "0.", ",", 
+           RowBox[{"-", "2.0"}]}], "}"}], "]"}], ",", "\[IndentingNewLine]", 
+        "Black", ",", " ", 
+        RowBox[{"Text", "[", 
+         RowBox[{
+          RowBox[{"Style", "[", 
+           RowBox[{"\"\<\\n  Initial \\n  Final\>\"", ",", "13"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", ".6"}], ",", "0", ",", 
+            RowBox[{"-", "2.0"}]}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+       "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"**", "**", "**", "**", "**"}], "*", " ", "Interactive", " ", 
+     "component", " ", "that", " ", "runs", " ", "every", " ", "time", " ", 
+     "the", " ", "user", " ", "changes", " ", "a", " ", 
+     RowBox[{"parameter", " ", "**", "**", "**", "**", "**"}], "*"}], " ", 
+    " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "DynamicModule", " ", "ensures", " ", "that", " ", "dynamic", " ", 
+     "variables", " ", "reside", " ", "in", " ", "a", " ", "local", " ", 
+     "scope"}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{"DynamicModule", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+       "InitPosStrB", "=", " ", 
+        "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"0\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)\>\""}], ",", " ", 
+       RowBox[{"TB", "=", " ", 
+        RowBox[{"\[Pi]", "/", "2"}]}], ",", " ", 
+       RowBox[{"\[Delta]B", "=", "0."}], ",", 
+       RowBox[{"\[CapitalOmega]0B", "=", "1."}], ",", " ", 
+       RowBox[{"\[Phi]0B", "=", "0."}], ",", 
+       RowBox[{"\[Gamma]1B", "=", "0."}]}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{"The", " ", "code", " ", "within", " ", 
+       RowBox[{"Manipulate", "[", "]"}], " ", "below", " ", "is", " ", "run", 
+       " ", "every", " ", "time", " ", "the", " ", "user", " ", "changes", 
+       " ", "a", " ", "dynamic", " ", "parameter"}], " ", "*)"}], "  ", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Manipulate", "[", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+       "Create", " ", "initial", " ", "density", " ", "matrix", " ", 
+        "\[Rho]0", " ", "using", " ", "user", " ", "input", " ", "and", " ", 
+        "define", " ", "a", " ", "3", "D", " ", "point", " ", "to", " ", 
+        "display", " ", "later"}], " ", "*)"}], "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"InitialBlochVector", " ", "=", " ", 
+         RowBox[{"BlochVectorFromInitPosStr", "[", "InitPosStrB", "]"}]}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{"\[Rho]0B", "=", 
+         RowBox[{"\[Rho]FromBlochVector", "[", "InitialBlochVector", "]"}]}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{"StartingPos", " ", "=", " ", 
+         RowBox[{"Graphics3D", "[", 
+          RowBox[{"{", " ", 
+           RowBox[{"Red", ",", 
+            RowBox[{"PointSize", "[", "Large", "]"}], ",", 
+            RowBox[{"Point", "[", "InitialBlochVector", "]"}], ",", " ", 
+            "\[IndentingNewLine]", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{
+              "InitPosStrB", " ", "==", 
+               "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*\
+StyleBox[\"0\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",\
+FontWeight->\"Bold\"]\)\>\""}], ",", 
+              RowBox[{"Text", "[", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{"InitPosStrB", ",", "12", ",", "Bold", ",", "Red"}], 
+                 "]"}], ",", 
+                RowBox[{"InitialBlochVector", "+", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"-", "0.1"}], ",", "0.12", ",", "0.2"}], "}"}]}]}],
+                "]"}], ",", "\[IndentingNewLine]", 
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{
+                "InitPosStrB", " ", "==", 
+                 "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*\
+StyleBox[\"1\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",\
+FontWeight->\"Bold\"]\)\>\""}], ",", 
+                RowBox[{"Text", "[", 
+                 RowBox[{
+                  RowBox[{"Style", "[", 
+                   RowBox[{
+                   "InitPosStrB", ",", "12", ",", "Bold", ",", "Red"}], "]"}],
+                   ",", 
+                  RowBox[{"InitialBlochVector", "+", 
+                   RowBox[{"{", " ", 
+                    RowBox[{"0.0", ",", "0.0", ",", 
+                    RowBox[{"-", "0.3"}]}], "}"}]}]}], "]"}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"If", "[", 
+                 RowBox[{
+                  RowBox[{
+                  "InitPosStrB", " ", "==", 
+                   "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*\
+StyleBox[\"+\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",\
+FontWeight->\"Bold\"]\)\>\""}], ",", 
+                  RowBox[{"Text", "[", 
+                   RowBox[{
+                    RowBox[{"Style", "[", 
+                    RowBox[{
+                    "InitPosStrB", ",", "12", ",", "Bold", ",", "Red"}], 
+                    "]"}], ",", 
+                    RowBox[{"InitialBlochVector", "+", 
+                    RowBox[{"{", " ", 
+                    RowBox[{"0.2", ",", "0.0", ",", 
+                    RowBox[{"-", "0.1"}]}], "}"}]}]}], "]"}], ",", " ", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"If", "[", 
+                   RowBox[{
+                    RowBox[{
+                    "InitPosStrB", " ", "==", 
+                    "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*\
+StyleBox[\"-\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",\
+FontWeight->\"Bold\"]\)\>\""}], ",", 
+                    RowBox[{"Text", "[", 
+                    RowBox[{
+                    RowBox[{"Style", "[", 
+                    RowBox[{
+                    "InitPosStrB", ",", "12", ",", "Bold", ",", "Red"}], 
+                    "]"}], ",", 
+                    RowBox[{"InitialBlochVector", "+", 
+                    RowBox[{"{", " ", 
+                    RowBox[{
+                    RowBox[{"-", "0.9"}], ",", "0.0", ",", "0."}], "}"}]}]}], 
+                    "]"}], ",", "\[IndentingNewLine]", 
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    "InitPosStrB", " ", "==", 
+                    "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*\
+StyleBox[\"i\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",\
+FontWeight->\"Bold\"]\)\>\""}], ",", 
+                    RowBox[{"Text", "[", 
+                    RowBox[{
+                    RowBox[{"Style", "[", 
+                    RowBox[{
+                    "InitPosStrB", ",", "12", ",", "Bold", ",", "Red"}], 
+                    "]"}], ",", 
+                    RowBox[{"InitialBlochVector", "+", 
+                    RowBox[{"{", " ", 
+                    RowBox[{
+                    RowBox[{"-", "0.5"}], ",", "0.05", ",", "0."}], "}"}]}]}],
+                     "]"}], ",", " ", "\[IndentingNewLine]", 
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    "InitPosStrB", " ", "==", 
+                    "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*\
+StyleBox[\"-\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"i\",FontWeight->\"Bold\
+\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"Bold\"]\)\>\""}], 
+                    ",", 
+                    RowBox[{"Text", "[", 
+                    RowBox[{
+                    RowBox[{"Style", "[", 
+                    RowBox[{
+                    "InitPosStrB", ",", "12", ",", "Bold", ",", "Red"}], 
+                    "]"}], ",", 
+                    RowBox[{"InitialBlochVector", "+", 
+                    RowBox[{"{", " ", 
+                    RowBox[{
+                    RowBox[{"-", "0.5"}], ",", 
+                    RowBox[{"-", "1.0"}], ",", "0."}], "}"}]}]}], "]"}], ",", 
+                    "Nothing"}], "]"}]}], "]"}]}], "]"}]}], "]"}]}], "]"}]}], 
+             "]"}]}], "}"}], "]"}]}], ";", "\[IndentingNewLine]", "\n", 
+        RowBox[{"(*", " ", 
+         RowBox[{
+          RowBox[{"Obtain", " ", "the", " ", "density", " ", "matrix", " ", 
+           RowBox[{"sol", ".", " ", "at"}], " ", "user", " ", "defined", " ", 
+           "params", " ", "as", " ", "a", " ", "function", " ", "of", " ", 
+           "t"}], ",", " ", 
+          RowBox[{
+           RowBox[{
+           "and", " ", "define", " ", "a", " ", "3", "D", " ", "plot", " ", 
+            "of", " ", "Bloch", " ", "vector", " ", "from", " ", "t"}], "=", 
+           RowBox[{"0", " ", "to", " ", "T"}]}]}], " ", "*)"}], 
+        "\[IndentingNewLine]", 
+        RowBox[{"rhoSolB", " ", "=", " ", 
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"\[Rho]11SolB", "[", 
+               RowBox[{
+               "\[Delta]B", ",", " ", "\[CapitalOmega]0B", ",", " ", 
+                "\[Phi]0B", ",", " ", "\[Gamma]1B", ",", " ", "TB", ",", " ", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "[", "tB", "]"}], 
+             ",", " ", 
+             RowBox[{
+              RowBox[{"\[Rho]12SolB", "[", 
+               RowBox[{
+               "\[Delta]B", ",", "\[CapitalOmega]0B", ",", " ", "\[Phi]0B", 
+                ",", " ", "\[Gamma]1B", ",", " ", "TB", ",", " ", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "[", "tB", "]"}]}], 
+            "}"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"\[Rho]21SolB", "[", 
+               RowBox[{
+               "\[Delta]B", ",", " ", "\[CapitalOmega]0B", ",", " ", 
+                "\[Phi]0B", ",", " ", "\[Gamma]1B", ",", " ", "TB", ",", " ", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "[", "tB", "]"}], 
+             ",", " ", 
+             RowBox[{
+              RowBox[{"\[Rho]22SolB", "[", 
+               RowBox[{
+               "\[Delta]B", ",", " ", "\[CapitalOmega]0B", ",", " ", 
+                "\[Phi]0B", ",", " ", "\[Gamma]1B", ",", " ", "TB", ",", " ", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "[", "tB", "]"}]}], 
+            "}"}]}], "}"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"BlochEvolution", " ", "=", " ", 
+         RowBox[{"ParametricPlot3D", "[", 
+          RowBox[{
+           RowBox[{"blochVectorFrom\[Rho]", "[", "rhoSolB", "]"}], ",", " ", 
+           RowBox[{"{", 
+            RowBox[{"tB", ",", "0", ",", "TB"}], "}"}], ",", " ", 
+           RowBox[{"PlotStyle", "\[Rule]", "Black"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"(*", " ", 
+         RowBox[{
+         "Obtain", " ", "the", " ", "final", " ", "density", " ", "matrix", 
+          " ", "solution", " ", "and", " ", "its", " ", "Blochvector", " ", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"at", " ", "T"}], ")"}], ".", " ", "Define"}], " ", "a", 
+          " ", "3", "D", " ", "Blochvector", " ", "point", " ", "to", " ", 
+          "display", " ", 
+          RowBox[{"later", "."}]}], " ", "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"\[Rho]Final", "=", 
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"\[Rho]11SolB", "[", 
+               RowBox[{
+               "\[Delta]B", ",", " ", "\[CapitalOmega]0B", ",", " ", 
+                "\[Phi]0B", ",", " ", "\[Gamma]1B", ",", "TB", ",", " ", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "[", "TB", "]"}], 
+             ",", 
+             RowBox[{
+              RowBox[{"\[Rho]12SolB", "[", 
+               RowBox[{
+               "\[Delta]B", ",", " ", "\[CapitalOmega]0B", ",", " ", 
+                "\[Phi]0B", ",", " ", "\[Gamma]1B", ",", "TB", ",", " ", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "[", "TB", "]"}]}], 
+            "}"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"\[Rho]21SolB", "[", 
+               RowBox[{
+               "\[Delta]B", ",", " ", "\[CapitalOmega]0B", ",", " ", 
+                "\[Phi]0B", ",", " ", "\[Gamma]1B", ",", "TB", ",", " ", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "[", "TB", "]"}], 
+             ",", 
+             RowBox[{
+              RowBox[{"\[Rho]22SolB", "[", 
+               RowBox[{
+               "\[Delta]B", ",", " ", "\[CapitalOmega]0B", ",", " ", 
+                "\[Phi]0B", ",", " ", "\[Gamma]1B", ",", "TB", ",", " ", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"\[Rho]0B", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "[", "TB", "]"}]}], 
+            "}"}]}], "}"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"FinalBlochVector", " ", "=", " ", 
+         RowBox[{"blochVectorFrom\[Rho]", "[", "\[Rho]Final", "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"EndingPos", " ", "=", " ", 
+         RowBox[{"Graphics3D", "[", 
+          RowBox[{"{", 
+           RowBox[{"Blue", ",", 
+            RowBox[{"PointSize", "[", "Medium", "]"}], ",", 
+            RowBox[{"Point", "[", "FinalBlochVector", "]"}]}], "}"}], "]"}]}],
+         ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        "\[IndentingNewLine]", 
+        RowBox[{"(*", " ", 
+         RowBox[{
+         "We", " ", "display", " ", "plots", " ", "within", " ", "the", " ", 
+          "following", " ", 
+          RowBox[{"Column", "/", "Grid"}]}], " ", "*)"}], 
+        "\[IndentingNewLine]", 
+        RowBox[{"Column", "[", 
+         RowBox[{
+          RowBox[{"{", "\[IndentingNewLine]", 
+           RowBox[{"(*", " ", 
+            RowBox[{
+             RowBox[{
+             "Show", " ", "the", " ", "3", "D", " ", "plots", " ", "prepared",
+               " ", "earlier"}], ",", " ", 
+             RowBox[{
+             "using", " ", "the", " ", "same", " ", "view", " ", 
+              "parameters"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+           RowBox[{"Dynamic", "[", 
+            RowBox[{"Show", "[", 
+             RowBox[{
+             "blochSphere", ",", "BlochEvolution", ",", " ", "axes", ",", 
+              "StartingPos", ",", " ", "EndingPos", ",", 
+              "\[IndentingNewLine]", 
+              RowBox[{"PlotRange", "->", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"-", "2"}], ",", "2"}], "}"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"-", "2"}], ",", "2"}], "}"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"-", "2"}], ",", "2"}], "}"}]}], "}"}]}], ",", 
+              "\[IndentingNewLine]", 
+              RowBox[{"Axes", "->", "False"}], ",", 
+              RowBox[{"Boxed", "->", "False"}], ",", 
+              RowBox[{"Background", "->", "White"}], ",", " ", 
+              "\[IndentingNewLine]", 
+              RowBox[{"ViewVertical", "->", 
+               RowBox[{"{", 
+                RowBox[{"0", ",", "0", ",", "1"}], "}"}]}], ",", 
+              RowBox[{"ViewPoint", "->", 
+               RowBox[{"{", 
+                RowBox[{"1.0", ",", "1.0", ",", ".5"}], "}"}]}], ",", 
+              "\[IndentingNewLine]", 
+              RowBox[{"ImageSize", "->", 
+               RowBox[{"{", 
+                RowBox[{"400", ",", "400"}], "}"}]}]}], "]"}], "]"}], 
+           "\[IndentingNewLine]", "}"}], ",", 
+          RowBox[{"Alignment", "->", "Center"}]}], " ", "]"}]}], ",", 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"Style", "[", 
+        RowBox[{
+        "\"\<Bloch vector \!\(\*OverscriptBox[\(v\), \
+\(\[RightArrow]\)]\)(t)=Tr[\[Rho](t)\!\(\*OverscriptBox[\(\[Sigma]\), \(\
+\[RightArrow]\)]\)]\>\"", ",", " ", "Bold", ",", " ", "17"}], "]"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Style", "[", 
+        RowBox[{
+        "\"\<(where \!\(\*OverscriptBox[\(\[Sigma]\), \(\[RightArrow]\)]\) = \
+X\!\(\*OverscriptBox[\(x\), \(^\)]\) + Y\!\(\*OverscriptBox[\(y\), \(^\)]\) + \
+Z\!\(\*OverscriptBox[\(z\), \(^\)]\))\>\"", ",", " ", "13"}], "]"}], ",", 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{"User", " ", "defined", " ", "dynamic", " ", "parameters"}], 
+        " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"Style", "[", 
+        RowBox[{
+        "\"\<\\nControl parameters:\>\"", ",", "15", ",", " ", "Bold"}], 
+        "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+          "InitPosStrB", ",", " ", 
+           "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\
+0\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight-\
+>\"Bold\"]\)\>\"", ",", " ", 
+           "\"\<Initial State \!\(\*SubscriptBox[\(\[Rho]\), \(0\)]\) \
+=|\!\(\*SubscriptBox[\(\[Psi]\), \(0\)]\)\[RightAngleBracket]\
+\[LeftAngleBracket]\!\(\*SubscriptBox[\(\[Psi]\), \(0\)]\)|:\>\""}], "}"}], 
+         ",", " ", 
+         RowBox[{"{", 
+          RowBox[{
+          "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"0\
+\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\
+\"Bold\"]\)\>\"", ",", " ", 
+           "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\
+1\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight-\
+>\"Bold\"]\)\>\"", ",", " ", 
+           "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"+\
+\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\
+\"Bold\"]\)\>\"", ",", " ", 
+           "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"-\
+\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\
+\"Bold\"]\)\>\"", ",", 
+           "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\
+i\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight-\
+>\"Bold\"]\)\>\"", ",", " ", 
+           "\"\<\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"-\
+\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"i\",FontWeight->\"Bold\"]\)\!\(\*\
+StyleBox[\"\[RightAngleBracket]\",FontWeight->\"Bold\"]\)\>\""}], "}"}]}], 
+        "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+          "\[Delta]B", ",", "0.", ",", " ", 
+           "\"\<Detuning (\[Delta]=\!\(\*SubscriptBox[\(\[Omega]\), \(0\)]\)-\
+\!\(\*SubscriptBox[\(\[Omega]\), \(d\)]\)):\>\""}], "}"}], ",", " ", 
+         RowBox[{"-", "1"}], ",", " ", "1", ",", " ", "0.1", ",", " ", 
+         RowBox[{"Appearance", "->", " ", "\"\<Labeled\>\""}], ",", " ", 
+         RowBox[{"LabelStyle", "\[Rule]", 
+          RowBox[{"{", "13", "}"}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           StyleBox["\[CapitalOmega]0B",
+            FontWeight->"Bold"], ",", "1.", ",", " ", 
+           "\"\<Field coupling (\!\(\*SubscriptBox[\(\[CapitalOmega]\), \
+\(0\)]\)):\>\""}], "}"}], ",", " ", 
+         RowBox[{"-", "1"}], ",", " ", "1", ",", " ", "0.1", ",", " ", 
+         RowBox[{"Appearance", "->", " ", "\"\<Labeled\>\""}], ",", " ", 
+         RowBox[{"LabelStyle", "\[Rule]", 
+          RowBox[{"{", "13", "}"}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           StyleBox["\[Phi]0B",
+            FontWeight->"Bold"], ",", "0.", ",", " ", 
+           "\"\<Field phase (\!\(\*SubscriptBox[\(\[Phi]\), \(0\)]\)):\>\""}],
+           "}"}], ",", " ", "0.", ",", " ", 
+         RowBox[{"2", "\[Pi]"}], ",", " ", 
+         RowBox[{"0.05", "\[Pi]"}], ",", " ", 
+         RowBox[{"Appearance", "->", " ", "\"\<Labeled\>\""}], ",", " ", 
+         RowBox[{"LabelStyle", "\[Rule]", 
+          RowBox[{"{", "13", "}"}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"TB", ",", 
+           RowBox[{"\[Pi]", "/", "2"}], ",", " ", "\"\<Evolution time:\>\""}],
+           "}"}], ",", " ", "0.01", ",", "10", ",", "0.1", ",", "  ", 
+         RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}], ",", " ", 
+         RowBox[{"LabelStyle", "\[Rule]", 
+          RowBox[{"{", "13", "}"}]}]}], "}"}], ",", " ", 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"Style", "[", 
+        RowBox[{
+        "\"\<\\n\\nEnvironmental influence(s):\>\"", ",", "15", ",", " ", 
+         "Bold"}], "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"\[Gamma]1B", ",", "0.", ",", " ", "\"\<Decay rate:\>\""}], 
+          "}"}], ",", " ", "0.", ",", " ", "1.", ",", " ", "0.1", ",", " ", 
+         RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}], ",", " ", 
+         RowBox[{"LabelStyle", "\[Rule]", 
+          RowBox[{"{", "13", "}"}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"AppearanceElements", "->", "\"\<ResetButton\>\""}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"ControlPlacement", "\[Rule]", "Left"}], " ", ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"LabelStyle", "->", 
+        RowBox[{"{", "13.0", "}"}]}], ",", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"**", " ", "Specify"}], " ", "which", " ", "symbols", " ", 
+         "should", " ", "trigger", " ", "updates", " ", "when", " ", "their", 
+         " ", "values", " ", "are", " ", "changed", " ", 
+         RowBox[{"(", 
+          RowBox[{
+          "makes", " ", "cloud", " ", "deployed", " ", "UI", " ", "faster"}], 
+          ")"}]}], " ", "***)"}], "\[IndentingNewLine]", 
+       RowBox[{"TrackedSymbols", ":>", 
+        RowBox[{"{", 
+         RowBox[{"InitPosStrB", ",", " ", "\[Delta]B", ",", " ", 
+          StyleBox["\[CapitalOmega]0B",
+           FontWeight->"Bold"], 
+          StyleBox[",",
+           FontWeight->"Bold"], 
+          StyleBox[" ",
+           FontWeight->"Bold"], 
+          StyleBox["\[Phi]0B",
+           FontWeight->"Bold"], 
+          StyleBox[",",
+           FontWeight->"Bold"], 
+          StyleBox[" ",
+           FontWeight->"Bold"], "TB", ",", " ", "\[Gamma]1B"}], "}"}]}], ",", 
+       "   ", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+         RowBox[{
+         "If", " ", "we", " ", "cloud", " ", "deploy", " ", "Manipulate"}], 
+         ",", 
+         RowBox[{
+         "the", " ", "UI", " ", "runs", " ", "remotely", " ", "on", " ", 
+          "the", " ", "Wolfram", " ", "Cloud", " ", "meaning", " ", "that", 
+          " ", "every", " ", "interaction", " ", 
+          RowBox[{"(", 
+           RowBox[{"like", " ", "moving", " ", "a", " ", "slider"}], ")"}], 
+          " ", "sends", " ", "a", " ", "request", " ", "to", " ", "the", " ", 
+          "server", " ", "to", " ", "recompute", " ", "and", " ", "return", 
+          " ", 
+          RowBox[{"results", ".", "This"}], " ", "introduces", " ", "network",
+           " ", "latency", " ", "and", " ", "delays", " ", "in", " ", 
+          "rendering", " ", "compared", " ", "to", " ", "running", " ", 
+          "locally", " ", "in", " ", "a", " ", "Mathematica", " ", 
+          "notebook"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"SynchronousUpdating", "->", "False"}]}], "  ", 
+      RowBox[{"(*", 
+       RowBox[{
+       "Keep", " ", "UI", " ", "responsive", " ", "withougt", " ", "timing", 
+        " ", "out", " ", "when", " ", 
+        RowBox[{"computing", ".", " ", "Have"}], " ", "this", " ", "line", 
+        " ", "for", " ", "cloud", " ", 
+        RowBox[{"deployments", "."}]}], " ", "*)"}], "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", "]"}]}], "]"}], 
+   "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.9497923869120393`*^9, 3.9497923877347074`*^9}, {
+   3.9497925232003946`*^9, 3.9497926230478005`*^9}, {3.9497927269091225`*^9, 
+   3.949792788158066*^9}, {3.949792858017307*^9, 3.9497929250990887`*^9}, {
+   3.949793415107682*^9, 3.949793430667472*^9}, {3.9497934834754844`*^9, 
+   3.9497935414344826`*^9}, 3.949793723451782*^9, {3.949793864262388*^9, 
+   3.9497938669472456`*^9}, {3.9497939174031143`*^9, 
+   3.9497940670860786`*^9}, {3.9497941015554423`*^9, 3.949794254435581*^9}, {
+   3.949794308558715*^9, 3.949794326176133*^9}, {3.9497943768526745`*^9, 
+   3.9497943772593546`*^9}, {3.949794408390082*^9, 3.949794527114546*^9}, 
+   3.9497945698406773`*^9, {3.9497946216320376`*^9, 3.9497946217106094`*^9}, {
+   3.9497946649986258`*^9, 3.9497946692666116`*^9}, {3.949794736345375*^9, 
+   3.9497947443458242`*^9}, 3.9497948914028063`*^9, {3.9497951471899877`*^9, 
+   3.949795160514653*^9}, {3.949795197314627*^9, 3.9497952631309853`*^9}, {
+   3.9497954204463067`*^9, 3.9497954602375035`*^9}, {3.949795501205268*^9, 
+   3.949795523802537*^9}, {3.949796007912672*^9, 3.949796021715975*^9}, {
+   3.949796092525605*^9, 3.9497961184956636`*^9}, {3.949796375602111*^9, 
+   3.9497964129709234`*^9}, {3.9497965991947823`*^9, 
+   3.9497966022645984`*^9}, {3.9497970452727814`*^9, 
+   3.9497971659790363`*^9}, {3.9497972273301516`*^9, 
+   3.9497973200574245`*^9}, {3.9497974005653276`*^9, 3.949797418768463*^9}, {
+   3.949797471143207*^9, 3.94979790139441*^9}, {3.9497981244612627`*^9, 
+   3.9497981248003225`*^9}, {3.949798781618342*^9, 3.9497987818927946`*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"cd370165-bfbb-48f9-a2df-1d46055cda95"],
+
+Cell[BoxData[
+ DynamicModuleBox[{$CellContext`InitPosStrB$$ = 
+  "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"0\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", $CellContext`TB$$ = Rational[1, 2] Pi, $CellContext`\[Delta]B$$ = 
+  0., $CellContext`\[CapitalOmega]0B$$ = 1., $CellContext`\[Phi]0B$$ = 
+  0., $CellContext`\[Gamma]1B$$ = 0.}, 
+  TagBox[
+   StyleBox[
+    DynamicModuleBox[{$CellContext`InitPosStrB$$ = 
+     "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"0\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", $CellContext`TB$$ = Rational[1, 2] Pi, $CellContext`\[Gamma]1B$$ =
+      0., $CellContext`\[Delta]B$$ = 0., $CellContext`\[Phi]0B$$ = 
+     0., $CellContext`\[CapitalOmega]0B$$ = 1., Typeset`show$$ = True, 
+     Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+     Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+     "\"untitled\"", Typeset`specs$$ = {{
+       Hold[
+        Style[
+        "Bloch vector \!\(\*OverscriptBox[\(v\), \(\[RightArrow]\)]\)(t)=Tr[\
+\[Rho](t)\!\(\*OverscriptBox[\(\[Sigma]\), \(\[RightArrow]\)]\)]", Bold, 17]],
+        Manipulate`Dump`ThisIsNotAControl}, {
+       Hold[
+        Style[
+        "(where \!\(\*OverscriptBox[\(\[Sigma]\), \(\[RightArrow]\)]\) = \
+X\!\(\*OverscriptBox[\(x\), \(^\)]\) + Y\!\(\*OverscriptBox[\(y\), \(^\)]\) + \
+Z\!\(\*OverscriptBox[\(z\), \(^\)]\))", 13]], 
+       Manipulate`Dump`ThisIsNotAControl}, {
+       Hold[
+        Style["\nControl parameters:", 15, Bold]], 
+       Manipulate`Dump`ThisIsNotAControl}, {{
+        Hold[$CellContext`InitPosStrB$$], 
+        "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"0\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+        "Initial State \!\(\*SubscriptBox[\(\[Rho]\), \(0\)]\) \
+=|\!\(\*SubscriptBox[\(\[Psi]\), \(0\)]\)\[RightAngleBracket]\
+\[LeftAngleBracket]\!\(\*SubscriptBox[\(\[Psi]\), \(0\)]\)|:"}, {
+       "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"0\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+        "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"1\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+        "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"+\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+        "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"-\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+        "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"i\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+        "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"-\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"i\",FontWeight->\"Bold\"]\)\!\(\*\
+StyleBox[\"\[RightAngleBracket]\",FontWeight->\"Bold\"]\)"}}, {{
+        Hold[$CellContext`\[Delta]B$$], 0., 
+        "Detuning (\[Delta]=\!\(\*SubscriptBox[\(\[Omega]\), \
+\(0\)]\)-\!\(\*SubscriptBox[\(\[Omega]\), \(d\)]\)):"}, -1, 1, 0.1}, {{
+        Hold[$CellContext`\[CapitalOmega]0B$$], 1., 
+        "Field coupling (\!\(\*SubscriptBox[\(\[CapitalOmega]\), \
+\(0\)]\)):"}, -1, 1, 0.1}, {{
+        Hold[$CellContext`\[Phi]0B$$], 0., 
+        "Field phase (\!\(\*SubscriptBox[\(\[Phi]\), \(0\)]\)):"}, 0., 2 Pi, 
+       0.15707963267948966`}, {{
+        Hold[$CellContext`TB$$], Rational[1, 2] Pi, "Evolution time:"}, 0.01, 
+       10, 0.1}, {
+       Hold[
+        Style["\n\nEnvironmental influence(s):", 15, Bold]], 
+       Manipulate`Dump`ThisIsNotAControl}, {{
+        Hold[$CellContext`\[Gamma]1B$$], 0., "Decay rate:"}, 0., 1., 0.1}}, 
+     Typeset`size$$ = {400., {197.13403309800196`, 202.86596690199804`}}, 
+     Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = True}, 
+     DynamicBox[Manipulate`ManipulateBoxes[
+      1, StandardForm, 
+       "Variables" :> {$CellContext`InitPosStrB$$ = 
+         "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"0\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", $CellContext`TB$$ = Rational[1, 2] Pi, $CellContext`\[Gamma]1B$$ = 
+         0., $CellContext`\[Delta]B$$ = 0., $CellContext`\[Phi]0B$$ = 
+         0., $CellContext`\[CapitalOmega]0B$$ = 1.}, 
+       "ControllerVariables" :> {}, 
+       "OtherVariables" :> {
+        Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+         Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+         Typeset`specs$$, Typeset`size$$, Typeset`update$$, 
+         Typeset`initDone$$, Typeset`skipInitDone$$}, 
+       "Body" :> ($CellContext`InitialBlochVector = \
+$CellContext`BlochVectorFromInitPosStr[$CellContext`InitPosStrB$$]; \
+$CellContext`\[Rho]0B = \
+$CellContext`\[Rho]FromBlochVector[$CellContext`InitialBlochVector]; \
+$CellContext`StartingPos = Graphics3D[{Red, 
+            PointSize[Large], 
+            Point[$CellContext`InitialBlochVector], 
+            
+            If[$CellContext`InitPosStrB$$ == 
+             "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"0\"\
+,FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+             Text[
+              
+              Style[$CellContext`InitPosStrB$$, 12, Bold, 
+               Red], $CellContext`InitialBlochVector + {-0.1, 0.12, 0.2}], 
+             
+             If[$CellContext`InitPosStrB$$ == 
+              "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"1\
+\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\
+\"Bold\"]\)", 
+              Text[
+               
+               Style[$CellContext`InitPosStrB$$, 12, Bold, 
+                Red], $CellContext`InitialBlochVector + {0., 0., -0.3}], 
+              
+              If[$CellContext`InitPosStrB$$ == 
+               "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"+\
+\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\
+\"Bold\"]\)", 
+               Text[
+                
+                Style[$CellContext`InitPosStrB$$, 12, Bold, 
+                 Red], $CellContext`InitialBlochVector + {0.2, 0., -0.1}], 
+               
+               If[$CellContext`InitPosStrB$$ == 
+                "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\
+-\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight-\
+>\"Bold\"]\)", 
+                Text[
+                 
+                 Style[$CellContext`InitPosStrB$$, 12, Bold, 
+                  Red], $CellContext`InitialBlochVector + {-0.9, 0., 0.}], 
+                
+                If[$CellContext`InitPosStrB$$ == 
+                 "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\
+\"i\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",\
+FontWeight->\"Bold\"]\)", 
+                 Text[
+                  
+                  Style[$CellContext`InitPosStrB$$, 12, Bold, 
+                   Red], $CellContext`InitialBlochVector + {-0.5, 0.05, 0.}], 
+                 
+                 If[$CellContext`InitPosStrB$$ == 
+                  "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\
+\"-\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"i\",FontWeight->\"Bold\"]\)\!\(\
+\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"Bold\"]\)", 
+                  Text[
+                   
+                   Style[$CellContext`InitPosStrB$$, 12, Bold, 
+                    Red], $CellContext`InitialBlochVector + {-0.5, -1., 0.}], 
+                  Nothing]]]]]]}]; $CellContext`rhoSolB = {{
+            $CellContext`\[Rho]11SolB[$CellContext`\[Delta]B$$, $CellContext`\
+\[CapitalOmega]0B$$, $CellContext`\[Phi]0B$$, $CellContext`\[Gamma]1B$$, \
+$CellContext`TB$$, 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 2], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 2]][$CellContext`tB], 
+            $CellContext`\[Rho]12SolB[$CellContext`\[Delta]B$$, $CellContext`\
+\[CapitalOmega]0B$$, $CellContext`\[Phi]0B$$, $CellContext`\[Gamma]1B$$, \
+$CellContext`TB$$, 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 2], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 2]][$CellContext`tB]}, {
+            $CellContext`\[Rho]21SolB[$CellContext`\[Delta]B$$, $CellContext`\
+\[CapitalOmega]0B$$, $CellContext`\[Phi]0B$$, $CellContext`\[Gamma]1B$$, \
+$CellContext`TB$$, 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 2], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 2]][$CellContext`tB], 
+            $CellContext`\[Rho]22SolB[$CellContext`\[Delta]B$$, $CellContext`\
+\[CapitalOmega]0B$$, $CellContext`\[Phi]0B$$, $CellContext`\[Gamma]1B$$, \
+$CellContext`TB$$, 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 2], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 
+              2]][$CellContext`tB]}}; $CellContext`BlochEvolution = 
+         ParametricPlot3D[
+           $CellContext`blochVectorFrom\[Rho][$CellContext`rhoSolB], \
+{$CellContext`tB, 0, $CellContext`TB$$}, PlotStyle -> 
+           Black]; $CellContext`\[Rho]Final = {{
+            $CellContext`\[Rho]11SolB[$CellContext`\[Delta]B$$, $CellContext`\
+\[CapitalOmega]0B$$, $CellContext`\[Phi]0B$$, $CellContext`\[Gamma]1B$$, \
+$CellContext`TB$$, 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 2], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 2]][$CellContext`TB$$], 
+            $CellContext`\[Rho]12SolB[$CellContext`\[Delta]B$$, $CellContext`\
+\[CapitalOmega]0B$$, $CellContext`\[Phi]0B$$, $CellContext`\[Gamma]1B$$, \
+$CellContext`TB$$, 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 2], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 2]][$CellContext`TB$$]}, {
+            $CellContext`\[Rho]21SolB[$CellContext`\[Delta]B$$, $CellContext`\
+\[CapitalOmega]0B$$, $CellContext`\[Phi]0B$$, $CellContext`\[Gamma]1B$$, \
+$CellContext`TB$$, 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 2], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 2]][$CellContext`TB$$], 
+            $CellContext`\[Rho]22SolB[$CellContext`\[Delta]B$$, $CellContext`\
+\[CapitalOmega]0B$$, $CellContext`\[Phi]0B$$, $CellContext`\[Gamma]1B$$, \
+$CellContext`TB$$, 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 1], 2], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 1], 
+             Part[
+              Part[$CellContext`\[Rho]0B, 2], 
+              2]][$CellContext`TB$$]}}; $CellContext`FinalBlochVector = \
+$CellContext`blochVectorFrom\[Rho][$CellContext`\[Rho]Final]; \
+$CellContext`EndingPos = Graphics3D[{Blue, 
+            PointSize[Medium], 
+            Point[$CellContext`FinalBlochVector]}]; Column[{
+           Dynamic[
+            
+            Show[$CellContext`blochSphere, $CellContext`BlochEvolution, \
+$CellContext`axes, $CellContext`StartingPos, $CellContext`EndingPos, 
+             PlotRange -> {{-2, 2}, {-2, 2}, {-2, 2}}, Axes -> False, Boxed -> 
+             False, Background -> White, ViewVertical -> {0, 0, 1}, 
+             ViewPoint -> {1., 1., 0.5}, ImageSize -> {400, 400}]]}, 
+          Alignment -> Center]), "Specifications" :> {
+         Style[
+         "Bloch vector \!\(\*OverscriptBox[\(v\), \(\[RightArrow]\)]\)(t)=Tr[\
+\[Rho](t)\!\(\*OverscriptBox[\(\[Sigma]\), \(\[RightArrow]\)]\)]", Bold, 17], 
+         Style[
+         "(where \!\(\*OverscriptBox[\(\[Sigma]\), \(\[RightArrow]\)]\) = X\!\
+\(\*OverscriptBox[\(x\), \(^\)]\) + Y\!\(\*OverscriptBox[\(y\), \(^\)]\) + \
+Z\!\(\*OverscriptBox[\(z\), \(^\)]\))", 13], 
+         Style[
+         "\nControl parameters:", 15, 
+          Bold], {{$CellContext`InitPosStrB$$, 
+           "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"0\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+           "Initial State \!\(\*SubscriptBox[\(\[Rho]\), \(0\)]\) \
+=|\!\(\*SubscriptBox[\(\[Psi]\), \(0\)]\)\[RightAngleBracket]\
+\[LeftAngleBracket]\!\(\*SubscriptBox[\(\[Psi]\), \(0\)]\)|:"}, {
+          "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"0\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+           "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"1\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+           "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"+\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+           "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"-\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+           "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"i\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"\[RightAngleBracket]\",FontWeight->\"\
+Bold\"]\)", 
+           "\!\(\*StyleBox[\"|\",FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"-\",\
+FontWeight->\"Bold\"]\)\!\(\*StyleBox[\"i\",FontWeight->\"Bold\"]\)\!\(\*\
+StyleBox[\"\[RightAngleBracket]\",FontWeight->\"Bold\"]\)"}}, {{$CellContext`\
+\[Delta]B$$, 0., 
+           "Detuning (\[Delta]=\!\(\*SubscriptBox[\(\[Omega]\), \(0\)]\)-\!\(\
+\*SubscriptBox[\(\[Omega]\), \(d\)]\)):"}, -1, 1, 0.1, Appearance -> 
+          "Labeled", 
+          LabelStyle -> {13}}, {{$CellContext`\[CapitalOmega]0B$$, 1., 
+           "Field coupling (\!\(\*SubscriptBox[\(\[CapitalOmega]\), \
+\(0\)]\)):"}, -1, 1, 0.1, Appearance -> "Labeled", 
+          LabelStyle -> {13}}, {{$CellContext`\[Phi]0B$$, 0., 
+           "Field phase (\!\(\*SubscriptBox[\(\[Phi]\), \(0\)]\)):"}, 0., 2 
+          Pi, 0.15707963267948966`, Appearance -> "Labeled", 
+          LabelStyle -> {13}}, {{$CellContext`TB$$, Rational[1, 2] Pi, 
+           "Evolution time:"}, 0.01, 10, 0.1, Appearance -> "Labeled", 
+          LabelStyle -> {13}}, 
+         Style[
+         "\n\nEnvironmental influence(s):", 15, 
+          Bold], {{$CellContext`\[Gamma]1B$$, 0., "Decay rate:"}, 0., 1., 0.1,
+           Appearance -> "Labeled", LabelStyle -> {13}}}, 
+       "Options" :> {
+        AppearanceElements -> "ResetButton", ControlPlacement -> Left, 
+         LabelStyle -> {13.}, 
+         TrackedSymbols :> {$CellContext`InitPosStrB$$, \
+$CellContext`\[Delta]B$$, $CellContext`\[CapitalOmega]0B$$, $CellContext`\
+\[Phi]0B$$, $CellContext`TB$$, $CellContext`\[Gamma]1B$$}, 
+         SynchronousUpdating -> False}, "DefaultOptions" :> {}],
+      ImageSizeCache->{857., {227.13403309800196`, 232.86596690199804`}},
+      SingleEvaluation->True],
+     Deinitialization:>None,
+     DynamicModuleValues:>{},
+     SynchronousInitialization->True,
+     UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+     UnsavedVariables:>{Typeset`initDone$$},
+     UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+    Deployed->True,
+    StripOnInput->False],
+   Manipulate`InterpretManipulate[1]],
+  DynamicModuleValues:>{}]], "Output",
+ CellChangeTimes->{
+  3.949792538832169*^9, 3.949792569941699*^9, 3.9497927474959545`*^9, {
+   3.949792777648177*^9, 3.949792788849929*^9}, 3.9497928958812637`*^9, 
+   3.9497929335615835`*^9, 3.9497929941903644`*^9, 3.9497934260699644`*^9, {
+   3.9497935252604866`*^9, 3.9497935431876354`*^9}, 3.9497937252434874`*^9, {
+   3.949793868816283*^9, 3.949793986423685*^9}, 3.9497940228495927`*^9, 
+   3.949794080130691*^9, 3.9497941108188653`*^9, {3.9497941497460346`*^9, 
+   3.949794255393013*^9}, 3.9497942931429033`*^9, 3.9497943276790676`*^9, {
+   3.94979436322106*^9, 3.9497943801737027`*^9}, {3.9497944127730627`*^9, 
+   3.949794528763213*^9}, 3.9497946271895485`*^9, 3.9497947791330185`*^9, 
+   3.949794896768136*^9, {3.9497951520697346`*^9, 3.9497951619783154`*^9}, {
+   3.9497952328038716`*^9, 3.949795264336232*^9}, {3.9497954336192555`*^9, 
+   3.949795461283866*^9}, {3.9497955113288946`*^9, 3.9497955411957855`*^9}, {
+   3.9497960140316825`*^9, 3.9497960275187864`*^9}, {3.949796100375787*^9, 
+   3.9497961195325236`*^9}, 3.9497964152299523`*^9, 3.949796603775777*^9, {
+   3.9497968312559004`*^9, 3.949796859680606*^9}, {3.9497972809688454`*^9, 
+   3.9497973212740173`*^9}, 3.949797402203847*^9, 3.949797547377427*^9, 
+   3.949797628544298*^9, 3.949797890596512*^9, {3.949798113755652*^9, 
+   3.9497981276272817`*^9}, 3.949798649427554*^9, 3.949798707201686*^9, {
+   3.949798737587837*^9, 3.9497988131366043`*^9}, {3.949798845045771*^9, 
+   3.9497989530414267`*^9}},
+ CellLabel->"Out[15]=",ExpressionUUID->"96489104-ba5d-4efc-91b2-36fcf988a5fd"]
+}, Open  ]]
+},
+WindowSize->{1117, 684.5},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"13.3 for Microsoft Windows (64-bit) (July 24, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"d3da77aa-29df-44bf-80d5-8394148d38a4"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 53284, 1203, 2934, "Input",ExpressionUUID->"cd370165-bfbb-48f9-a2df-1d46055cda95"],
+Cell[53867, 1227, 17881, 347, 479, "Output",ExpressionUUID->"96489104-ba5d-4efc-91b2-36fcf988a5fd"]
+}, Open  ]]
+}
+]
+*)
+
